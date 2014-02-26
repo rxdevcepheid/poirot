@@ -6,3 +6,4 @@ default['poirot']['port'] = 2120
 default['poirot']['index_prefix'] = "poirot"
 default['poirot']['debug'] = false
 default['poirot']['host'] = node['fqdn']
+default['poirot']['elasticsearch']['host'] = "localhost:9200"
