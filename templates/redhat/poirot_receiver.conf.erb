@@ -1,0 +1,5 @@
+start on runlevel [2345]
+stop on runlevel [016]
+respawn
+
+exec su <%= node['poirot']['receiver']['user'] %> --session-command='/opt/poirot_receiver/current/bin/poirot_receiver -port=<%= node['poirot']['receiver']['port'] %> -index_prefix=<%= node['poirot']['receiver']['index_prefix'] %> -debug=<%= node['poirot']['receiver']['debug'] %>'

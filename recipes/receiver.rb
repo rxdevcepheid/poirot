@@ -10,6 +10,8 @@ else
   raise "Unsupported platform: #{node['platform']}"
 end
 
+user node['poirot']['receiver']['user']
+
 service "poirot_receiver" do
   provider Chef::Provider::Service::Upstart
 end

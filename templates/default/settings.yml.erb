@@ -1,2 +1,6 @@
 elasticsearch:
   url: <%= node['poirot']['elasticsearch']['host'] %>
+
+mailer:
+  default_from: <%= node['poirot']['web']['email'] %>
+  host: <%= node['poirot']['web']['host'] %>
