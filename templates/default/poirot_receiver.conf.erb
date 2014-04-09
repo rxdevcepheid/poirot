@@ -1,9 +1,0 @@
-start on runlevel [2345]
-stop on runlevel [016]
-setuid <%= node['poirot']['receiver']['user'] %>
-respawn
-
-exec /opt/poirot_receiver/current/bin/poirot_receiver \
-  -port=<%= node['poirot']['receiver']['port'] %> \
-  -index_prefix=<%= node['poirot']['receiver']['index_prefix'] %> \
-  -debug=<%= node['poirot']['receiver']['debug'] %>
