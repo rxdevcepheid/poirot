@@ -5,7 +5,7 @@ case node['platform']
 when 'ubuntu'
   package "uuid-dev"
   include_recipe "zeromq"
-when 'redhat'
+when 'redhat', 'centos'
   package "zeromq-devel"
 else
   raise "Unsupported platform: #{node['platform']}"
