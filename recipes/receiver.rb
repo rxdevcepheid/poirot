@@ -9,7 +9,7 @@ remote_file "/usr/local/bin/rebar" do
   mode 0755
 end
 
-app_dir = "/u/apps/poirot"
+app_dir = "/u/apps/poirot-receiver"
 
 # Create user to run the receiver service
 user node['poirot']['receiver']['user']
@@ -67,7 +67,7 @@ end
 ssh_known_hosts_entry "bitbucket.org"
 
 # Deploy receiver application
-application "poirot" do
+application "poirot-receiver" do
   revision node['poirot']['revision'] if node['poirot']['revision']
 
   path app_dir

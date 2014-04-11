@@ -34,12 +34,12 @@ end
 # Configure webapp
 package "nodejs"
 
-app_dir = "/u/apps/poirot"
+app_dir = "/u/apps/poirot-web"
 user node['poirot']['web']['user']
 
 poirot_node = node['poirot']
 
-application "poirot" do
+application "poirot-web" do
   path app_dir
   repository "https://bitbucket.org/instedd/poirot.git"
   migrate true
@@ -99,7 +99,7 @@ if node['poirot']['web']['auth']
 end
 
 web_app "poirot" do
-  docroot "/u/apps/poirot/current/public"
+  docroot "#{app_dir}/current/public"
   port node['poirot']['web']['port']
   server_name node['poirot']['web']['host']
   server_aliases []
