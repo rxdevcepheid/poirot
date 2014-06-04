@@ -98,6 +98,27 @@ if node['poirot']['web']['auth']
   execute("htpasswd -bc #{node['apache']['dir']}/poirot.htpasswd #{node['poirot']['web']['auth']['user']} #{node['poirot']['web']['auth']['pass']}")
 end
 
+if node['poirot']['web']['notifications']
+  template "poirot-notifications.conf" do
+    path "/etc/init/poirot-notifications.conf"
+    source "poirot-notifications.conf.erb"
+    owner "root"
+    group "root"
+    mode 0644
+    variables(
+      user: node['poirot']['web']['user'],
+      app_dir: app_dir,
+      bundle_command: "#{node[:rbenv][:root_path]}/shims/bundle"
+    )
+  end
+
+  service "poirot-notifications" do
+    provider Chef::Provider::Service::Upstart
+    restart_command "restart poirot-notifications"
+    action :restart
+  end
+end
+
 web_app "poirot" do
   docroot "#{app_dir}/current/public"
   port node['poirot']['web']['port']

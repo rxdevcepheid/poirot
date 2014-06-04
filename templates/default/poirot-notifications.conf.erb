@@ -1,0 +1,12 @@
+start on runlevel [2345]
+stop on runlevel [016]
+respawn
+respawn limit 10 600
+chdir <%= @app_dir %>/current
+env HOME=<%= @app_dir %>/current
+env RAILS_ENV=production
+setuid <%= @user %>
+limit nofile 4096 4096
+
+exec <%= @bundle_command %> exec bin/notification_service >> <%= @app_dir %>/shared/log/notifications.log 2>&1
+
