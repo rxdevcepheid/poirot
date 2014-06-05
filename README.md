@@ -87,7 +87,7 @@ From within the previous console, issue a `SHOW databases` command and ensure th
     | Database            |
     +---------------------+
     | ...                 |
-    | cepheid_production  |
+    | poirot              |
     | ...                 |
     +---------------------+
 
