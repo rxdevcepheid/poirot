@@ -114,7 +114,7 @@ if node['poirot']['web']['notifications']
 
   service "poirot-notifications" do
     provider Chef::Provider::Service::Upstart
-    restart_command "restart poirot-notifications"
+    restart_command "stop poirot-notifications; start poirot-notifications"
     action :restart
   end
 end
