@@ -138,7 +138,14 @@ Check that a request to localhost returns the appropriate status code, replacing
     $ curl -u cepheid:PASSWORD -sL -w "%{http_code}\n" localhost -o /dev/null
     > 200
 
-If there is no auth defined, replace the command above by `curl -sL -w "%{http_code}\n" localhost -o /dev/null`.
+If there is no auth defined, replace the command above by:
+
+    curl -sL -w "%{http_code}\n" localhost -o /dev/null
+
+Check that the notifications service is running:
+
+    $ sudo status poirot-notifications
+    > poirot-notifications start/running, process XXXX
 
 ## Contributing
 
