@@ -116,7 +116,7 @@ if node['poirot']['web']['notifications']
     mysql_database node['poirot']['mysql']['dbname'] do
       connection mysql_connection
       action :query
-      sql "INSERT IGNORE INTO notifications (email, subject, query, last_run_at, created_at, updated_at) VALUES ('#{notification['email']}', '#{notification['subject']}', '#{notification['query']}', NOW(), NOW(), NOW()"
+      sql "INSERT IGNORE INTO notifications (email, subject, query, last_run_at, created_at, updated_at) VALUES ('#{notification['email']}', '#{notification['subject']}', '#{notification['query']}', NOW(), NOW(), NOW())"
     end
   end if node['poirot']['web']['notifications'].kind_of?(Array)
 
