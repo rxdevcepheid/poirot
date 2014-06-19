@@ -73,9 +73,9 @@ Verify the receiver process is running:
 
 ### Poirot Web
 
-Check connection to MySQL server as `poirot` user. Note the command will prompt for the required password, specified in the config file as `poirot/mysql/user_pass`:
+Check connection to MySQL server as `poirot` user, replacing DBHOST by the private IP of the DB server. Note the command will prompt for the required password, specified in the config file as `poirot/mysql/user_pass`:
 
-    $ mysql -u poirot -P 3306 -p
+    $ mysql -u poirot -P 3306 -h DBHOST -p
     > Enter password:
     > Welcome to the MySQL monitor...
 
