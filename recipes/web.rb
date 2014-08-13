@@ -21,13 +21,15 @@ mysql_database node['poirot']['mysql']['dbname'] do
   action :create
 end
 
-mysql_database_user node['poirot']['mysql']['user_name'] do
-  connection    mysql_connection
-  password      node['poirot']['mysql']['user_pass']
-  privileges    ["DELETE", "INSERT", "SELECT", "UPDATE", "LOCK TABLES"]
-  database_name node['poirot']['mysql']['dbname']
-  host          node['poirot']['web']['internal_host']
-  action        :grant
+[node['poirot']['web']['internal_host']].flatten.each do |host|
+  mysql_database_user node['poirot']['mysql']['user_name'] do
+    connection    mysql_connection
+    password      node['poirot']['mysql']['user_pass']
+    privileges    ["DELETE", "INSERT", "SELECT", "UPDATE", "LOCK TABLES"]
+    database_name node['poirot']['mysql']['dbname']
+    host          host
+    action        :grant
+  end
 end
 
 
