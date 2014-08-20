@@ -44,6 +44,7 @@ poirot_node = node['poirot']
 application "poirot-web" do
   path app_dir
   repository "https://bitbucket.org/instedd/poirot.git"
+  revision node['poirot']['web']['revision'] if node['poirot']['web']['revision']
   migrate true
   environment_name "production"
   rollback_on_error false
