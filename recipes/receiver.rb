@@ -63,15 +63,15 @@ simple_iptables_rule "poirot" do
   jump "ACCEPT"
 end
 
-# Trust bitbucket
-ssh_known_hosts_entry "bitbucket.org"
+# Trust github
+ssh_known_hosts_entry "github.com"
 
 # Deploy receiver application
 application "poirot-receiver" do
   revision node['poirot']['revision'] if node['poirot']['revision']
 
   path app_dir
-  repository "git@bitbucket.org:instedd/poirot_erlang.git"
+  repository "https://github.com/instedd/poirot_erlang.git"
   deploy_key data_bag_item('deploy_keys', 'deploy_key')['private_key']
   purge_before_symlink ["log", "tmp"]
   symlinks "log" => "log", "tmp" => "tmp", "poirot.config" => "poirot.config"

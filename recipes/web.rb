@@ -41,9 +41,13 @@ user node['poirot']['web']['user']
 
 poirot_node = node['poirot']
 
+# Trust github
+ssh_known_hosts_entry "github.com"
+
+# Deploy web app
 application "poirot-web" do
   path app_dir
-  repository "https://bitbucket.org/instedd/poirot.git"
+  repository "https://github.com/instedd/poirot.git"
   revision node['poirot']['web']['revision'] if node['poirot']['web']['revision']
   migrate true
   environment_name "production"
