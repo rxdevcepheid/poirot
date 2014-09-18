@@ -6,7 +6,6 @@ rbenv_gem "bundler" do
   ruby_version "2.0.0-p353"
 end
 
-
 # Create database and mysql user to run the application
 include_recipe "database::mysql"
 
@@ -101,10 +100,12 @@ application "poirot-web" do
   end
 end
 
+# Set up passwords file if basic auth is configured
 if node['poirot']['web']['auth']
   execute("htpasswd -bc #{node['apache']['dir']}/poirot.htpasswd #{node['poirot']['web']['auth']['user']} #{node['poirot']['web']['auth']['pass']}")
 end
 
+# Configure notifications daemon and insert default notifications
 if node['poirot']['web']['notifications']
   template "poirot-notifications.conf" do
     path "/etc/init/poirot-notifications.conf"
@@ -134,6 +135,12 @@ if node['poirot']['web']['notifications']
   end
 end
 
+# Add poirot port to apache listen ports
+unless node['apache']['listen_ports'].include?(node['poirot']['web']['port'])
+  node.set['apache']['listen_ports'] = node['apache']['listen_ports'] + [node['poirot']['web']['port']]
+end
+
+# Create web app config in apache
 web_app "poirot" do
   docroot "#{app_dir}/current/public"
   port node['poirot']['web']['port']
@@ -141,4 +148,8 @@ web_app "poirot" do
   server_aliases []
   use_auth node['poirot']['web']['auth']
   user node['poirot']['web']['user']
+  use_ssl node['poirot']['web']['ssl']
+  cert_path node['poirot']['web']['cert_path']
+  ca_cert_path node['poirot']['web']['ca_cert_path']
+  key_path node['poirot']['web']['key_path']
 end

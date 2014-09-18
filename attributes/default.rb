@@ -18,6 +18,7 @@ default['poirot']['web']['user'] = 'poirot-web'
 default['poirot']['web']['email'] = 'no-reply@poirot.instedd.org'
 default['poirot']['web']['notifications'] = true
 default['poirot']['web']['revision'] = nil
+default['poirot']['web']['ssl'] = false
 
 default['poirot']['mysql']['user_name'] = 'poirot'
 default['poirot']['mysql']['user_pass'] = ''
