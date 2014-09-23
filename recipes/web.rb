@@ -44,7 +44,7 @@ poirot_node = node['poirot']
 ssh_known_hosts_entry "github.com"
 
 # Deploy web app
-application "poirot-web" do
+application "poirot" do
   path app_dir
   repository "https://github.com/instedd/poirot.git"
   revision node['poirot']['web']['revision'] if node['poirot']['web']['revision']
