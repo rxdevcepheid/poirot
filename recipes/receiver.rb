@@ -72,7 +72,6 @@ application "poirot-receiver" do
 
   path app_dir
   repository "https://github.com/instedd/poirot_erlang.git"
-  deploy_key data_bag_item('deploy_keys', 'deploy_key')['private_key']
   purge_before_symlink ["log", "tmp"]
   symlinks "log" => "log", "tmp" => "tmp", "poirot.config" => "poirot.config"
   restart_command "sudo stop poirot; sudo start poirot"
