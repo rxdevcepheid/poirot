@@ -68,7 +68,7 @@ ssh_known_hosts_entry "github.com"
 
 # Deploy receiver application
 application "poirot-receiver" do
-  revision node['poirot']['revision'] if node['poirot']['revision']
+  revision node['poirot']['receiver']['revision'] if node['poirot']['receiver']['revision']
 
   path app_dir
   repository "https://github.com/instedd/poirot_erlang.git"
