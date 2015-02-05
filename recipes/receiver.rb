@@ -74,7 +74,7 @@ application "poirot-receiver" do
   repository "https://github.com/instedd/poirot_erlang.git"
   purge_before_symlink ["log", "tmp"]
   symlinks "log" => "log", "tmp" => "tmp", "poirot.config" => "poirot.config"
-  restart_command "sudo stop poirot; sudo start poirot"
+  restart_command "stop poirot; start poirot"
 
   symlink_before_migrate({})
   migrate false
