@@ -47,7 +47,10 @@ ssh_known_hosts_entry "github.com"
 application "poirot" do
   path app_dir
   repository "https://github.com/instedd/poirot.git"
-  revision node['poirot']['web']['revision'] if node['poirot']['web']['revision']
+  if node['poirot']['web']['revision']
+    shallow_clone false
+    revision node['poirot']['web']['revision']
+  end
   migrate true
   environment_name "production"
   rollback_on_error false
