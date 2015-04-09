@@ -1,0 +1,8 @@
+protocol: <%= node['poirot']['web']['ssl']['force'] ? 'https' : 'http' %>
+
+elasticsearch:
+  url: <%= node['poirot']['elasticsearch']['host'] %>
+
+mailer:
+  default_from: <%= node['poirot']['from_email'] %>
+  host: <%= node['poirot']['host_name'] %>

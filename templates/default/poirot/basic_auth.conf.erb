@@ -1,0 +1,9 @@
+<% if node['poirot']['web']['auth'] %>
+  <Location / >
+    AuthType basic
+    AuthName "Poirot web interface"
+    AuthBasicProvider file
+    AuthUserFile <%= node['apache']['dir'] %>/poirot.htpasswd
+    Require valid-user
+  </Location>
+<% end %>
