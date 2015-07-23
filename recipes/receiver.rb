@@ -36,17 +36,51 @@ template "poirot.config" do
   mode 0600
 end
 
-# Register service in upstart
-template "poirot.conf" do
-  path "/etc/init/poirot.conf"
-  source "poirot.conf.erb"
-  owner "root"
-  group "root"
-  mode 0644
-  variables(
-    user: node['poirot']['receiver']['user'],
-    app_dir: app_dir
-  )
+service_provider = case node['platform']
+                   when 'centos'
+                     if node['platform_version'].to_i >= 7
+                       :systemd
+                     else
+                       :upstart
+                     end
+                   else
+                     :upstart
+                   end
+
+case service_provider
+when :upstart
+  # Register service in upstart
+  template "poirot.conf" do
+    path "/etc/init/poirot.conf"
+    source "poirot.conf.erb"
+    owner "root"
+    group "root"
+    mode 0644
+    variables(
+      user: node['poirot']['receiver']['user'],
+      app_dir: app_dir
+    )
+  end
+when :systemd
+  # Reload systemd units
+  execute 'systemctl-daemon-reload' do
+    command '/bin/systemctl --system daemon-reload'
+    action :nothing
+  end
+
+  # Register service in systemd
+  template "poirot.service" do
+    path "/etc/systemd/system/poirot.service"
+    source "poirot.service.erb"
+    owner "root"
+    group "root"
+    mode 0644
+    variables(
+      user: node['poirot']['receiver']['user'],
+      app_dir: app_dir
+    )
+    notifies :run, 'execute[systemctl-daemon-reload]', :immediately
+  end
 end
 
 # Configure log rotate for application
@@ -77,7 +111,12 @@ application "poirot-receiver" do
   repository "https://github.com/instedd/poirot_erlang.git"
   purge_before_symlink ["log", "tmp"]
   symlinks "log" => "log", "tmp" => "tmp", "poirot.config" => "poirot.config"
-  restart_command "stop poirot; start poirot"
+  case service_provider
+  when :upstart
+    restart_command "stop poirot; start poirot"
+  when :systemd
+    restart_command "systemctl restart poirot"
+  end
 
   symlink_before_migrate({})
   migrate false
