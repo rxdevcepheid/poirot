@@ -8,6 +8,7 @@ User=<%= @user %>
 ExecStartPre=/bin/sh -ec "touch <%= @app_dir %>/shared/log/poirot.log; chown <%= @user %> <%= @app_dir %>/shared/log/poirot.log"
 WorkingDirectory=<%= @app_dir %>/current
 ExecStart=/bin/sh -ec "exec /usr/bin/erl -pa poirot/ebin deps/*/ebin -boot start_sasl -s poirot_app -config poirot -sname poirot@localhost -noshell -noinput"
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
