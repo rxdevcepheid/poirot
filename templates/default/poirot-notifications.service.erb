@@ -1,0 +1,14 @@
+[Unit]
+Description=Poirot Notifications Service
+After=elasticsearch.service
+
+[Service]
+Type=simple
+User=<%= @user %>
+WorkingDirectory=<%= @app_dir %>/current
+ExecStart=/bin/sh -ec "<%= @bundle_command %> exec bin/notification_service
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+

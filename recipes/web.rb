@@ -7,7 +7,9 @@ rbenv_gem "bundler" do
 end
 
 # Create database and mysql user to run the application
-include_recipe "database::mysql"
+mysql2_chef_gem 'default' do
+  action :install
+end
 
 mysql_connection = {
   :host => node['poirot']['mysql']['host'],
@@ -110,19 +112,6 @@ end
 
 # Configure notifications daemon and insert default notifications
 if node['poirot']['web']['notifications']
-  template "poirot-notifications.conf" do
-    path "/etc/init/poirot-notifications.conf"
-    source "poirot-notifications.conf.erb"
-    owner "root"
-    group "root"
-    mode 0644
-    variables(
-      user: node['poirot']['web']['user'],
-      app_dir: app_dir,
-      bundle_command: "#{node[:rbenv][:root_path]}/shims/bundle"
-    )
-  end
-
   node['poirot']['web']['notifications'].each do |notification|
     mysql_database node['poirot']['mysql']['dbname'] do
       connection mysql_connection
@@ -131,10 +120,51 @@ if node['poirot']['web']['notifications']
     end
   end if node['poirot']['web']['notifications'].kind_of?(Array)
 
-  service "poirot-notifications" do
-    provider Chef::Provider::Service::Upstart
-    restart_command "stop poirot-notifications; start poirot-notifications"
-    action :restart
+  case node['init_package']
+  when 'systemd'
+    # Reload systemd units
+    execute 'systemctl-daemon-reload' do
+      command '/bin/systemctl --system daemon-reload'
+      action :nothing
+    end
+
+    template "poirot-notifications.service" do
+      path "/etc/systemd/system/poirot-notifications.service"
+      source "poirot-notifications.service.erb"
+      owner "root"
+      group "root"
+      mode 0644
+      variables(
+        user: node['poirot']['web']['user'],
+        app_dir: app_dir,
+        bundle_command: "#{node[:rbenv][:root_path]}/shims/bundle"
+      )
+      notifies :run, 'execute[systemctl-daemon-reload]', :immediately
+    end
+
+    service "poirot-notifications" do
+      provider Chef::Provider::Service::Systemd
+      action :restart
+    end
+  else
+    template "poirot-notifications.conf" do
+      path "/etc/init/poirot-notifications.conf"
+      source "poirot-notifications.conf.erb"
+      owner "root"
+      group "root"
+      mode 0644
+      variables(
+        user: node['poirot']['web']['user'],
+        app_dir: app_dir,
+        bundle_command: "#{node[:rbenv][:root_path]}/shims/bundle"
+      )
+    end
+
+    service "poirot-notifications" do
+      provider Chef::Provider::Service::Upstart
+      restart_command "stop poirot-notifications; start poirot-notifications"
+      action :restart
+    end
   end
 end
 
