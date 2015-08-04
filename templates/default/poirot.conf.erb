@@ -6,14 +6,5 @@ setuid <%= @user %>
 env HOME=<%= @app_dir %>/current
 limit nofile 4096 4096
 
-pre-start script
-
-bash << "EOF"
-  touch <%= @app_dir %>/shared/log/poirot.log
-  chown <%= @user %> <%= @app_dir %>/shared/log/poirot.log
-EOF
-
-end script
-
-exec erl -pa poirot/ebin deps/*/ebin -boot start_sasl -s poirot_app -config poirot -sname poirot@localhost -noshell -noinput >> <%= @app_dir %>/shared/log/poirot.log 2>&1
+exec <%= @app_dir %>/poirot.sh
 

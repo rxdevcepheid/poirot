@@ -1,0 +1,23 @@
+#!/bin/sh
+# Starts the Poirot Receiver
+
+LOGFILE=<%= @app_dir %>/shared/log/poirot.log
+
+# "Reloading" of service for logrotate
+function sighup_handler()
+{
+  exec 1>> $LOGFILE 2>&1
+}
+trap sighup_handler HUP
+
+# Redirect stdout and stderr to the log file
+echo "Logging service output to $LOGFILE"
+sighup_handler
+
+cd <%= @app_dir %>/current
+/usr/bin/erl -pa poirot/ebin deps/*/ebin \
+             -boot start_sasl -s poirot_app \
+             -config poirot -sname poirot@localhost -noshell -noinput
+
+exit $?
+

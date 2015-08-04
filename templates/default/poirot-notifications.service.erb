@@ -7,7 +7,7 @@ Type=simple
 User=<%= @user %>
 WorkingDirectory=<%= @app_dir %>/current
 Environment=RAILS_ENV=production
-ExecStart=/bin/sh -ec "<%= @bundle_command %> exec bin/notification_service
+ExecStart=/bin/sh -ec "<%= @bundle_command %> exec bin/notification_service"
 Restart=on-failure
 
 [Install]
