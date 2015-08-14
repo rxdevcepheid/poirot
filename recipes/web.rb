@@ -19,6 +19,8 @@ mysql_connection = {
 
 mysql_database node['poirot']['mysql']['dbname'] do
   connection mysql_connection
+  encoding 'utf8'
+  collation 'utf8_general_ci'
   action :create
 end
 
