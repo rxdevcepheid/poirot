@@ -16,6 +16,7 @@ mysql_connection = {
   :username => node['poirot']['mysql']['root_name'],
   :password => node['poirot']['mysql']['root_pass']
 }
+mysql_connection[:socket] = node['poirot']['mysql']['socket'] if node['poirot']['mysql']['socket']
 
 mysql_database node['poirot']['mysql']['dbname'] do
   connection mysql_connection
