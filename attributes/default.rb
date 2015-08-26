@@ -27,3 +27,5 @@ default['poirot']['mysql']['root_pass'] = ''
 
 default['poirot']['mysql']['host'] = 'localhost'
 default['poirot']['mysql']['dbname'] = 'poirot'
+default['poirot']['mysql']['socket'] = nil
+

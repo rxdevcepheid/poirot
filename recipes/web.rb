@@ -17,6 +17,13 @@ mysql_connection = {
   :password => node['poirot']['mysql']['root_pass']
 }
 
+# only define the connection socket for local connections
+if mysql_connection[:host].nil? || %w(localhost 127.0.0.1 ::1).include?(mysql_connection[:host])
+  # ... and if a value is provided, otherwise the default (usually
+  # /var/lib/mysql/mysqld.sock) will be used
+  mysql_connection[:socket] = node['poirot']['mysql']['socket'] if node['poirot']['mysql']['socket']
+end
+
 mysql_database node['poirot']['mysql']['dbname'] do
   connection mysql_connection
   encoding 'utf8'
