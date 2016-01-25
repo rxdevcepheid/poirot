@@ -102,7 +102,7 @@ when 'systemd'
 
   service "poirot" do
     provider Chef::Provider::Service::Systemd
-    action :restart
+    action [:enable, :restart]
   end
 else
   # Register service in upstart
